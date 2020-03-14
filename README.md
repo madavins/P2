@@ -106,10 +106,21 @@ Ejercicios
 	* Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para estar
       seguros de que un segmento de señal se corresponde con voz.
 
+	Fixant-nos en la gràfica on es representa la potència veiem que, aproximadament, el nivell de potència de silenci 
+	inicial és de 2dB. Valorant els espais temporals de veu on la potència és menor (25-30dB), pensem que un increment 
+	de potència raonable seria de 20dB.
+
 	* Duración mínima razonable de los segmentos de voz y silencio.
+
+	Mirant la nostra transcripció pensem que un temps de mínim silenci raonable és de 250 ms.
+        Pel que fal al temps mínim de veu, pensem que 200 ms és suficient.
 
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
 
+	Si es un fitxer amb poc soroll podem extreure conclusions de la ZCR, per exemple, quan es tracta 
+	de fonemes fricatius (f, s). 	Però, si el fitxer conté un nivell de soroll mitjà no som capaços 
+	d'extreure cap conclusió a partir d'aquest paràmetre, ja que 	en els trams de silenci el valor de 
+	la ZCR es dispara.
 
 ### Desarrollo del detector de actividad vocal
 
@@ -123,9 +134,39 @@ Ejercicios
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 
+	Com podem observar a la següent captura de la senyal:
+
+<img src="img/img3.png" width="640" align="center">
+
+	Podem trobar discrepancies mínimes en alguns casos, com per exemple en aquests dos trams de senyal, 
+	on d'una banda, tenim un tram de silenci en el qual el nostre programa a inclós un subtram de veu (V), 
+	degut a un petit increment en la potència de la senyal. 
+
+	D'altra banda, tenim el cas contrari, on el nostre programa ha designat com a tram de silenci (S) 
+	el so la fricativa labiodental 'v', degut a la disminució de la potència de la senyal en aquest tram. 
+	Observem a partir de la gràfica de la tasa ZCR que aquest últim cas podria haver estar corregit, 
+	tenint en compte que durant la pronuncia de la consonant, el ZCR ha augmentat considerablement. No 
+	obstant això, tal i com hem comentat amb anterioritat, això només haugés estat possible en casos 
+	com aquest on el soroll de fons de l'audio és practicament inapreciable.
+
+	Finalment, també tenim petits errors en els trams finals de paraula, com s'aprecia en diverses
+	parts de l'audio, on considerem com a veu trams els trams baixa potència que en realitat són ja de silenci.
+
+
 - Evalúe los resultados sobre la base de datos `db.v4` con el script `vad_evaluation.pl` e inserte a 
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
+
+<img src="img/img4.png" width="640" align="center">
+
+	Des del nostre punt de vista, creiem que una precisió del 93.6% és un molt bon resultat. Analitzant
+	aquells audios on obtenim una menor precisió, observem que són aquells on hi ha un major nivell de soroll,
+	el locutor fa servir un to de veu molt baix, o directament considerem que no estan ben etiquetats.
+
+	Per tal de millorar els resultats obtinguts, considerem que en alguns casos podria ser adecuat fer servir
+	les mesures de l'amplitud o el ZCR, a part de mirar d'ajustar encara més els paràmetres corresponents als
+	diferents llindars de Veu, Soroll, o Undefined.
+
 
 
 ### Trabajos de ampliación
