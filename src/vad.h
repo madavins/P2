@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 /* TODO: add the needed states */
-typedef enum {ST_UNDEF=0, ST_SILENCE, ST_VOICE, ST_INIT} VAD_STATE;
+typedef enum {ST_UNDEF, ST_MAYBE_VOICE, ST_MAYBE_SILENCE, ST_SILENCE, ST_VOICE, ST_INIT} VAD_STATE;
 
 /* Return a string label associated to each state */
 const char *state2str(VAD_STATE st);
@@ -32,8 +32,10 @@ unsigned int vad_frame_size(VAD_DATA *);
 /* Main function. For each 'time', compute the new state 
    It returns:
     ST_UNDEF   (0) : undefined; it needs more frames to take decission
-    ST_SILENCE (1) : silence
-    ST_VOICE   (2) : voice
+    ST_MAYBE_VOICE (1) : maybe voice
+    ST_MAYBE_SILENCE (2) : maybe silence
+    ST_SILENCE (3) : silence
+    ST_VOICE (4) : voice
 
     x: input frame
        It is assumed the length is frame_length */
@@ -45,5 +47,6 @@ VAD_STATE vad_close(VAD_DATA *vad_data);
 
 /* Print actual state of vad, for debug purposes */
 void vad_show_state(const VAD_DATA *, FILE *);
+
 
 #endif
