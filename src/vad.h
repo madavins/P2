@@ -46,7 +46,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x);
 VAD_STATE vad_close(VAD_DATA *vad_data);
 
 /* Print actual state of vad, for debug purposes */
-void vad_show_state(const VAD_DATA *, FILE *);
+void vad_show_state(int t, const VAD_DATA *, FILE *);
 
 
 #endif

@@ -109,10 +109,10 @@ int main(int argc, char *argv[])
     }
 
     state = vad(vad_data, buffer); //Retorna state actual
-    vad_show_state(vad_data, test);
+    vad_show_state(t, vad_data, test);
 
     if (verbose & DEBUG_VAD)
-      vad_show_state(vad_data, stdout);
+      vad_show_state(t, vad_data, stdout);
 
     /* TODO: print only SILENCE and VOICE labels */
     /* As it is, it prints UNDEF segments but is should be merge to the proper value */

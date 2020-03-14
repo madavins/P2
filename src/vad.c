@@ -108,7 +108,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x)
 
   Features f = compute_features(x, vad_data->frame_length, vad_data->sampling_rate);
 
-  vad_data->last_feature = f.p; /* save feature, in case you want to show */
+  vad_data->last_feature = f.zcr; /* save feature, in case you want to show */
 
   switch (vad_data->state)
   {
@@ -198,7 +198,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x)
     return ST_UNDEF;
 }
 
-void vad_show_state(const VAD_DATA *vad_data, FILE *out)
+void vad_show_state(int t, const VAD_DATA *vad_data, FILE *out)
 {
-  fprintf(out, "%d\t%f\n", vad_data->state, vad_data->last_feature);
+  fprintf(out, "%d\t%f\n", t, vad_data->last_feature);
 }
