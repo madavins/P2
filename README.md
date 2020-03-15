@@ -182,11 +182,24 @@ Ejercicios
 - Si ha usado `docopt_c` para realizar la gestión de las opciones y argumentos del programa `vad`, inserte
   una captura de pantalla en la que se vea el mensaje de ayuda del programa.
 
+<img src="img/img5.png" width="640" align="center">
 
 ### Contribuciones adicionales y/o comentarios acerca de la práctica
 
 - Indique a continuación si ha realizado algún tipo de aportación suplementaria (algoritmos de detección o 
   parámetros alternativos, etc.).
+
+	Voliem destacar que per tal d'obtenir la màxima precisió, hem optat per generar un algoritme adaptatiu
+	pels paràmetres	alfa1 i alfa2, de manera que vam realitzar diverses mesures tant en els audios que 
+	tenien un major nivell de soroll, com aquells que tenien un major nivell de qualitat (menys soroll), i 
+	vam estimar quins serien els valors alfa1 i alfa2 més addients per aquells casos. D'aquesta forma,
+	vam calcular els paràmetres mitjançant una funció lineal, ja que vam decretar que els llindars
+	alfa1 i alfa2 havíen de ser majors com menor fos el nivell de soroll, i assolien el seu mínim en audios
+	amb un major soroll de fons. Per tant, després d'ajustar les funcions per tots dos paràmetres, vam obtenir
+	que els millors valors eren:
+
+	a1 = -0.08 * k0 + 2.0;
+	a2 = -0.036 * a1 + 1.8;
 
 - Si lo desea, puede realizar también algún comentario acerca de la realización de la práctica que considere
   de interés de cara a su evaluación.

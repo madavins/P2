@@ -16,6 +16,11 @@ typedef struct {
     int verbose;
     int version;
     /* options with arguments */
+    char *NS;
+    char *NV;
+    char *Ninit;
+    char *a1;
+    char *a2;
     char *input_wav;
     char *output_vad;
     char *output_wav;
@@ -36,6 +41,11 @@ const char help_message[] =
 "   -i FILE, --input-wav=FILE   WAVE file for voice activity detection\n"
 "   -o FILE, --output-vad=FILE  Label file with the result of VAD\n"
 "   -w FILE, --output-wav=FILE  WAVE file with silences cleared\n"
+"   --a1=double                  Value of parameter a1\n"
+"   --a2=double                  Value of parameter a2\n"
+"   --NS=double                  Value of Minimum Silence Time\n"
+"   --NV=double                  Value of Minimum Voice Time\n"
+"   --Ninit=double               Value of Initial Frames \n"
 "   -v, --verbose  Show debug information\n"
 "   -h, --help     Show this screen\n"
 "   --version      Show the version of the project\n"
@@ -270,6 +280,21 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
             args->verbose = option->value;
         } else if (!strcmp(option->olong, "--version")) {
             args->version = option->value;
+        } else if (!strcmp(option->olong, "--NS")) {
+            if (option->argument)
+                args->NS = option->argument;
+        } else if (!strcmp(option->olong, "--NV")) {
+            if (option->argument)
+                args->NV = option->argument;
+        } else if (!strcmp(option->olong, "--Ninit")) {
+            if (option->argument)
+                args->Ninit = option->argument;
+        } else if (!strcmp(option->olong, "--a1")) {
+            if (option->argument)
+                args->a1 = option->argument;
+        } else if (!strcmp(option->olong, "--a2")) {
+            if (option->argument)
+                args->a2 = option->argument;
         } else if (!strcmp(option->olong, "--input-wav")) {
             if (option->argument)
                 args->input_wav = option->argument;
@@ -299,7 +324,7 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
 
 DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
     DocoptArgs args = {
-        0, 0, 0, NULL, NULL, NULL,
+        0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         usage_pattern, help_message
     };
     Tokens ts;
@@ -311,11 +336,16 @@ DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
         {"-h", "--help", 0, 0, NULL},
         {"-v", "--verbose", 0, 0, NULL},
         {NULL, "--version", 0, 0, NULL},
+        {NULL, "--NS", 1, 0, NULL},
+        {NULL, "--NV", 1, 0, NULL},
+        {NULL, "--Ninit", 1, 0, NULL},
+        {NULL, "--a1", 1, 0, NULL},
+        {NULL, "--a2", 1, 0, NULL},
         {"-i", "--input-wav", 1, 0, NULL},
         {"-o", "--output-vad", 1, 0, NULL},
         {"-w", "--output-wav", 1, 0, NULL}
     };
-    Elements elements = {0, 0, 6, commands, arguments, options};
+    Elements elements = {0, 0, 11, commands, arguments, options};
 
     ts = tokens_new(argc, argv);
     if (parse_args(&ts, &elements))

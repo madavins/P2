@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
   unsigned int t, last_t; /* in frames */
 
   char *input_wav, *output_vad, *output_wav;
+  double a1, a2, NS, NV, Ninit;
 
   DocoptArgs args = docopt(argc, argv, /* help */ 1, /* version */ "2.0");
 
@@ -35,6 +36,47 @@ int main(int argc, char *argv[])
   input_wav = args.input_wav;
   output_vad = args.output_vad;
   output_wav = args.output_wav;
+   if (args.a1 != 0)
+  {
+    a1 = strtod(args.a1, NULL);
+  }
+  else
+  {
+    a1 = 0.0;
+  }
+   if (args.a2 != 0)
+  {
+    a2 = strtod(args.a2, NULL);
+  }
+  else
+  {
+    a2 = 0.0;
+  }
+  
+  if (args.NS != 0)
+  {
+    NS = strtod(args.NS, NULL);
+  }
+  else
+  {
+    NS = 12;
+  }
+  if (args.NV != 0)
+  {
+    NV = strtod(args.NV, NULL);
+  }
+  else
+  {
+    NV = 1;
+  }
+  if (args.Ninit != 0)
+  {
+    Ninit = strtod(args.Ninit, NULL);
+  }
+  else
+  {
+    Ninit = 10;
+  }
 
   if (input_wav == 0 || output_vad == 0)
   {
@@ -78,7 +120,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  vad_data = vad_open(sf_info.samplerate); //Asigna STATE = ST_INIT
+  vad_data = vad_open(sf_info.samplerate, a1, a2, NS, NV, Ninit); //Asigna STATE = ST_INIT
   /* Allocate memory for buffers */
   frame_size = vad_frame_size(vad_data);
   buffer = (float *)malloc(frame_size * sizeof(float));

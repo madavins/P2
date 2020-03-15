@@ -59,12 +59,31 @@ Features compute_features(const float *x, int N, float fm)
  * TODO: Init the values of vad_data
  */
 
-VAD_DATA *vad_open(float rate)
+double k0 = 0.0;
+double k1, k2;
+double a1 = 0.0;
+double a2 = 0.0;
+//int Ninit = 10;
+//int NV = 1;
+//int NS = 12;
+double Ninit = 0.0;
+double NV = 0.0;
+double NS = 0.0;
+int n = 0;
+int ns = 0;
+int nv = 0;
+
+VAD_DATA *vad_open(float rate,  double a1Usr, double a2Usr, double NSUsr, double NVUsr, double NinitUsr)
 {
   VAD_DATA *vad_data = malloc(sizeof(VAD_DATA));
   vad_data->state = ST_INIT;
   vad_data->sampling_rate = rate;
   vad_data->frame_length = rate * FRAME_TIME * 1e-3;
+  a1 = a1Usr;
+  a2 = a2Usr;
+  NS = NSUsr;
+  NV = NVUsr;
+  Ninit = NinitUsr; 
   return vad_data;
 }
 
@@ -88,15 +107,6 @@ unsigned int vad_frame_size(VAD_DATA *vad_data)
  * TODO: Implement the Voice Activity Detection 
  * using a Finite State Automata
  */
-double k0 = 0.0;
-double k1, k2, a1, a2;
-const int Ninit = 10;
-const int NV = 1;
-const int NS = 12;
-int n = 0;
-int ns = 0;
-int nv = 0;
-
 
 VAD_STATE vad(VAD_DATA *vad_data, float *x)
 {
@@ -123,9 +133,11 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x)
     else
     {
       k0 = 100 * log10(k0 / Ninit);
-      a1 = -0.08 * k0 + 2.0;
-      //a2 = 5.0;
+      if(a1 == 0.0)
+        a1 = -0.08 * k0 + 2.0;
+      if(a2 == 0.0)
       a2 = -0.036 * a1 + 1.8;
+
       k1 = k0 + a1;
       k2 = k1 + a2;
       vad_data->state = ST_SILENCE;
